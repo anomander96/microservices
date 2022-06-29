@@ -1,0 +1,31 @@
+info:
+  app:
+    name: two
+    description: Service Two
+
+server:
+  port: ${PORT_TO_EXPOSE:0}
+
+spring:
+  cloud:
+    config:
+      enabled: false
+  zipkin:
+    baseUrl: http://zipkin:${zipkin-port}
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:${discovery-port}/eureka/
+
+servo:
+  graphite:
+    observerPrefix: two
+    address: graphite:${graphite-port}
+
+logging:
+  level:
+    ROOT: INFO
+    com.epam.javacc.microservices: DEBUG

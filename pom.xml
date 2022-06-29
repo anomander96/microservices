@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <groupId>org.example.microservices</groupId>
+    <artifactId>microservices-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>platform-services</module>
+        <module>business-services</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <spring-boot.version>1.4.3.RELEASE</spring-boot.version>
+        <spring-boot-starter-test.version>1.4.3.RELEASE</spring-boot-starter-test.version>
+        <junit.version>4.12</junit.version>
+        <discovery-host>localhost</discovery-host>
+        <discovery-port>8761</discovery-port>
+        <docker-maven-plugin.version>0.4.11</docker-maven-plugin.version>
+        <feign-slf4j>8.18.0</feign-slf4j>
+        <feign-core>8.18.0</feign-core>
+        <docker_image_prefix>ma_lab_project</docker_image_prefix>
+
+        <graphite-host>localhost</graphite-host>
+        <graphite-port>2003</graphite-port>
+
+        <zipkin-host>localhost</zipkin-host>
+        <zipkin-port>9411</zipkin-port>
+
+        <sleuth-zipkin.version>1.0.1.RELEASE</sleuth-zipkin.version>
+        <spring-cloud-starter-spectator.version>1.1.2.RELEASE</spring-cloud-starter-spectator.version>
+        <servo-graphite.version>0.12.8</servo-graphite.version>
+        <archaius-core.version>0.7.4</archaius-core.version>
+        <commons-logging.version>1.2</commons-logging.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- Directory plugin to find parent root directory absolute path -->
+            <plugin>
+                <groupId>org.commonjava.maven.plugins</groupId>
+                <artifactId>directory-maven-plugin</artifactId>
+                <version>0.1</version>
+                <executions>
+                    <execution>
+                        <id>directories</id>
+                        <goals>
+                            <goal>highest-basedir</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                        <configuration>
+                            <property>base-path</property>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.0.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>1.10</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.10</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Camden.SR5</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring-boot-starter-test.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>spring-boot-starter-basic</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.netflix.rxjava</groupId>
+                <artifactId>rxjava-async-util</artifactId>
+                <version>${rxjava-async.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+                <version>${sleuth-zipkin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-spectator</artifactId>
+                <version>${spring-cloud-starter-spectator.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.netflix.servo</groupId>
+                <artifactId>servo-graphite</artifactId>
+                <version>${servo-graphite.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <properties>
+                <discovery-host>discovery</discovery-host>
+                <discovery-port>8761</discovery-port>
+
+                <graphite-host>graphite</graphite-host>
+                <graphite-port>2003</graphite-port>
+
+                <zipkin-host>zipkin</zipkin-host>
+                <zipkin-port>9411</zipkin-port>
+            </properties>
+        </profile>
+    </profiles>
+
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/libs-milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/libs-snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+
+</project>

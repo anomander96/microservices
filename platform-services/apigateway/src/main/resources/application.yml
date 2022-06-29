@@ -1,0 +1,4 @@
+zuul:
+  routes:
+    one: /one/**
+    two: /two/**

@@ -1,0 +1,4 @@
+# Project exclude paths
+/business-services/common/target/
+/platform-services/discovery/target/
+/platform-services/target/
